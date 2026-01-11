@@ -4,59 +4,53 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal webapp for tracking periodic tasks/chores (e.g., "Replaced cat water fountain filter") with completion history and overdue notifications.
+Personal webapp for tracking periodic tasks/chores with completion history and overdue notifications. Deployed on Vercel with Neon Postgres database.
+
+## Commands
+
+```bash
+npm run dev      # Start dev server at localhost:3000
+npm run build    # Production build
+npm run lint     # ESLint
+```
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router) with TypeScript
-- **Database**: Vercel Postgres
-- **Styling**: Tailwind CSS
-- **Hosting**: Vercel
-- **Auth**: Simple password gate via middleware (env var `APP_PASSWORD`)
+- Next.js 14 (App Router) + TypeScript
+- Neon Postgres (via @vercel/postgres)
+- Tailwind CSS
+- Deployed on Vercel
 
-## Common Commands
+## Database
 
-```bash
-npm run dev          # Start development server (localhost:3000)
-npm run build        # Production build
-npm run lint         # Run ESLint
-```
+Two tables in Neon Postgres (`db/schema.sql`):
+- `tasks` - name, description, interval_days, notifications_enabled, is_archived
+- `completions` - task_id, completed_at, notes
 
-## Architecture
+Database functions in `src/lib/db.ts`.
 
-### Data Model
+## Routes
 
-Two tables in Postgres:
-- `tasks` - Task definitions with name, optional interval_days, notifications_enabled flag
-- `completions` - Completion records linking to tasks with completed_at timestamp
+**Pages:**
+- `/` - Dashboard with task list, color toggle, notifications banner
+- `/login` - Password gate
+- `/tasks/new` - Create task form
+- `/tasks/[id]` - Task detail with completion history
 
-### Key Routes
-
-- `/` - Dashboard showing all tasks with status indicators and "Done" buttons
-- `/tasks/new` - Create new task form
-- `/tasks/[id]` - Task detail page with completion history
-
-### API Routes
-
+**API:**
 - `GET/POST /api/tasks` - List and create tasks
 - `GET/PUT/DELETE /api/tasks/[id]` - Task CRUD
-- `POST /api/completions` - Log a task completion
+- `POST /api/completions` - Log completion
+- `PUT/DELETE /api/completions/[id]` - Edit/delete completion
+- `POST /api/auth/login` - Password authentication
 
-### Auth Flow
+## Auth
 
-Password gate middleware checks for auth cookie. Single password stored in `APP_PASSWORD` env var.
+Simple password gate via middleware (`src/middleware.ts`). Password stored in `APP_PASSWORD` env var. Auth cookie lasts 30 days.
 
-## Environment Variables
+## Key Files
 
-Vercel Postgres env vars (auto-set when linking database):
-- `POSTGRES_URL`
-- `POSTGRES_PRISMA_URL`
-- `POSTGRES_URL_NO_SSL`
-- `POSTGRES_URL_NON_POOLING`
-- `POSTGRES_USER`
-- `POSTGRES_HOST`
-- `POSTGRES_PASSWORD`
-- `POSTGRES_DATABASE`
-
-App config:
-- `APP_PASSWORD` - Password for accessing the app
+- `src/lib/db.ts` - All database queries
+- `src/lib/types.ts` - TypeScript types
+- `src/lib/utils.ts` - Date formatting, status calculation
+- `src/components/` - TaskCard, TaskForm, CompletionHistory, NotificationsBanner
