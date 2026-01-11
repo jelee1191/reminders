@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, use } from 'react'
+import { useEffect, useState, use, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { TaskForm } from '@/components/TaskForm'
@@ -20,22 +20,23 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
   const [editing, setEditing] = useState(false)
   const [deleting, setDeleting] = useState(false)
 
-  useEffect(() => {
-    async function fetchTask() {
-      try {
-        const res = await fetch(`/api/tasks/${id}`)
-        if (res.ok) {
-          const data = await res.json()
-          setTask(data)
-        }
-      } catch (error) {
-        console.error('Failed to fetch task:', error)
-      } finally {
-        setLoading(false)
+  const fetchTask = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/tasks/${id}`)
+      if (res.ok) {
+        const data = await res.json()
+        setTask(data)
       }
+    } catch (error) {
+      console.error('Failed to fetch task:', error)
+    } finally {
+      setLoading(false)
     }
-    fetchTask()
   }, [id])
+
+  useEffect(() => {
+    fetchTask()
+  }, [fetchTask])
 
   async function handleArchive() {
     if (!task) return
@@ -62,12 +63,7 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ task_id: id }),
     })
-    // Refresh task data
-    const res = await fetch(`/api/tasks/${id}`)
-    if (res.ok) {
-      const data = await res.json()
-      setTask(data)
-    }
+    fetchTask()
   }
 
   if (loading) {
@@ -183,7 +179,7 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
             History ({task.completions.length})
           </h2>
-          <CompletionHistory completions={task.completions} />
+          <CompletionHistory completions={task.completions} onUpdate={fetchTask} />
         </div>
       </div>
     </div>

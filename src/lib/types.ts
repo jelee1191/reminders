@@ -37,6 +37,11 @@ export interface CompletionInsert {
   notes?: string | null
 }
 
+export interface CompletionUpdate {
+  completed_at?: string
+  notes?: string | null
+}
+
 export interface TaskWithCompletion extends Task {
   last_completion: Completion | null
 }

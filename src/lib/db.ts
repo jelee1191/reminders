@@ -1,5 +1,5 @@
 import { sql } from '@vercel/postgres'
-import type { Task, TaskInsert, TaskUpdate, Completion, CompletionInsert } from './types'
+import type { Task, TaskInsert, TaskUpdate, Completion, CompletionInsert, CompletionUpdate } from './types'
 
 // Tasks
 export async function getTasks(): Promise<Task[]> {
@@ -28,13 +28,24 @@ export async function createTask(task: TaskInsert): Promise<Task> {
 }
 
 export async function updateTask(id: string, task: TaskUpdate): Promise<Task> {
+  // Fetch current task to merge values
+  const current = await getTaskById(id)
+  if (!current) throw new Error('Task not found')
+
+  // Merge: use new value if provided (including null), otherwise keep current
+  const name = task.name !== undefined ? task.name : current.name
+  const description = task.description !== undefined ? task.description : current.description
+  const interval_days = task.interval_days !== undefined ? task.interval_days : current.interval_days
+  const notifications_enabled = task.notifications_enabled !== undefined ? task.notifications_enabled : current.notifications_enabled
+  const is_archived = task.is_archived !== undefined ? task.is_archived : current.is_archived
+
   const { rows } = await sql<Task>`
     UPDATE tasks SET
-      name = COALESCE(${task.name ?? null}, name),
-      description = COALESCE(${task.description ?? null}, description),
-      interval_days = COALESCE(${task.interval_days ?? null}, interval_days),
-      notifications_enabled = COALESCE(${task.notifications_enabled ?? null}, notifications_enabled),
-      is_archived = COALESCE(${task.is_archived ?? null}, is_archived),
+      name = ${name},
+      description = ${description},
+      interval_days = ${interval_days},
+      notifications_enabled = ${notifications_enabled},
+      is_archived = ${is_archived},
       updated_at = NOW()
     WHERE id = ${id}
     RETURNING *
@@ -73,4 +84,19 @@ export async function createCompletion(completion: CompletionInsert): Promise<Co
     RETURNING *
   `
   return rows[0]
+}
+
+export async function updateCompletion(id: string, update: CompletionUpdate): Promise<Completion> {
+  const { rows } = await sql<Completion>`
+    UPDATE completions SET
+      completed_at = COALESCE(${update.completed_at ?? null}, completed_at),
+      notes = ${update.notes !== undefined ? update.notes : null}
+    WHERE id = ${id}
+    RETURNING *
+  `
+  return rows[0]
+}
+
+export async function deleteCompletion(id: string): Promise<void> {
+  await sql`DELETE FROM completions WHERE id = ${id}`
 }

@@ -9,6 +9,22 @@ import type { TaskWithCompletion } from '@/lib/types'
 export default function Dashboard() {
   const [tasks, setTasks] = useState<TaskWithCompletion[]>([])
   const [loading, setLoading] = useState(true)
+  const [showColors, setShowColors] = useState(true)
+
+  // Load color preference from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem('showColors')
+    if (stored !== null) {
+      setShowColors(stored === 'true')
+    }
+  }, [])
+
+  // Save color preference to localStorage
+  function toggleColors() {
+    const newValue = !showColors
+    setShowColors(newValue)
+    localStorage.setItem('showColors', String(newValue))
+  }
 
   const fetchTasks = useCallback(async () => {
     try {
@@ -48,12 +64,23 @@ export default function Dashboard() {
       <div className="max-w-2xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Tasks</h1>
-          <Link
-            href="/tasks/new"
-            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Add Task
-          </Link>
+          <div className="flex items-center gap-4">
+            <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showColors}
+                onChange={toggleColors}
+                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              Colors
+            </label>
+            <Link
+              href="/tasks/new"
+              className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Add Task
+            </Link>
+          </div>
         </div>
 
         <NotificationsBanner tasks={tasks} />
@@ -75,6 +102,7 @@ export default function Dashboard() {
                 key={task.id}
                 task={task}
                 onComplete={handleComplete}
+                showColors={showColors}
               />
             ))}
           </div>

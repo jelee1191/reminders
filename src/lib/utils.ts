@@ -45,6 +45,24 @@ export function formatDate(date: Date | string): string {
   })
 }
 
+export function formatDateTime(date: Date | string): string {
+  const d = date instanceof Date ? date : new Date(date)
+
+  // Format: "7PM Sat 1/10/26"
+  const hour = d.getHours()
+  const ampm = hour >= 12 ? 'PM' : 'AM'
+  const hour12 = hour % 12 || 12
+
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const dayName = days[d.getDay()]
+
+  const month = d.getMonth() + 1
+  const day = d.getDate()
+  const year = d.getFullYear().toString().slice(-2)
+
+  return `${hour12}${ampm} ${dayName} ${month}/${day}/${year}`
+}
+
 export function formatRelativeTime(date: Date | string): string {
   const days = getDaysSince(date)
 
@@ -86,4 +104,15 @@ export function getIntervalLabel(days: number | null): string {
   if (days === 365) return 'Every year'
 
   return `Every ${days} days`
+}
+
+export function toLocalDateTimeString(date: Date | string): string {
+  const d = date instanceof Date ? date : new Date(date)
+  // Format for datetime-local input: "YYYY-MM-DDTHH:MM"
+  const year = d.getFullYear()
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  const hours = String(d.getHours()).padStart(2, '0')
+  const minutes = String(d.getMinutes()).padStart(2, '0')
+  return `${year}-${month}-${day}T${hours}:${minutes}`
 }

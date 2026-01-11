@@ -8,9 +8,10 @@ import { getTaskStatus, formatRelativeTime, getIntervalLabel } from '@/lib/utils
 interface TaskCardProps {
   task: TaskWithCompletion
   onComplete: (taskId: string) => Promise<void>
+  showColors?: boolean
 }
 
-export function TaskCard({ task, onComplete }: TaskCardProps) {
+export function TaskCard({ task, onComplete, showColors = true }: TaskCardProps) {
   const [loading, setLoading] = useState(false)
   const status = getTaskStatus(task)
 
@@ -28,6 +29,8 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
     neutral: 'bg-gray-400',
   }
 
+  const noColorStyle = 'bg-white border-gray-200'
+
   async function handleComplete() {
     setLoading(true)
     try {
@@ -38,11 +41,13 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
   }
 
   return (
-    <div className={`rounded-lg border p-4 ${statusColors[status]}`}>
+    <div className={`rounded-lg border p-4 ${showColors ? statusColors[status] : noColorStyle}`}>
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className={`w-2.5 h-2.5 rounded-full ${statusDot[status]}`} />
+            {showColors && (
+              <span className={`w-2.5 h-2.5 rounded-full ${statusDot[status]}`} />
+            )}
             <Link
               href={`/tasks/${task.id}`}
               className="font-medium text-gray-900 hover:text-blue-600 truncate"
