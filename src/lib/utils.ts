@@ -45,14 +45,10 @@ export function formatDate(date: Date | string): string {
   })
 }
 
-export function formatDateTime(date: Date | string): string {
+export function formatShortDate(date: Date | string): string {
   const d = date instanceof Date ? date : new Date(date)
 
-  // Format: "7PM Sat 1/10/26"
-  const hour = d.getHours()
-  const ampm = hour >= 12 ? 'PM' : 'AM'
-  const hour12 = hour % 12 || 12
-
+  // Format: "Sat 1/10/26"
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   const dayName = days[d.getDay()]
 
@@ -60,7 +56,7 @@ export function formatDateTime(date: Date | string): string {
   const day = d.getDate()
   const year = d.getFullYear().toString().slice(-2)
 
-  return `${hour12}${ampm} ${dayName} ${month}/${day}/${year}`
+  return `${dayName} ${month}/${day}/${year}`
 }
 
 export function formatRelativeTime(date: Date | string): string {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import type { Completion } from '@/lib/types'
-import { formatDateTime, toLocalDateTimeString } from '@/lib/utils'
+import { formatShortDate, toLocalDateTimeString } from '@/lib/utils'
 
 interface CompletionHistoryProps {
   completions: Completion[]
@@ -107,7 +107,7 @@ export function CompletionHistory({ completions, onUpdate }: CompletionHistoryPr
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1">
                 <span className="text-sm font-medium text-gray-900">
-                  {formatDateTime(completion.completed_at)}
+                  {formatShortDate(completion.completed_at)}
                 </span>
                 {completion.notes && (
                   <p className="mt-1 text-sm text-gray-600">{completion.notes}</p>

@@ -10,6 +10,7 @@ export default function Dashboard() {
   const [tasks, setTasks] = useState<TaskWithCompletion[]>([])
   const [loading, setLoading] = useState(true)
   const [showColors, setShowColors] = useState(true)
+  const [filter, setFilter] = useState<'recurring' | 'nonrecurring'>('recurring')
 
   // Load color preference from localStorage
   useEffect(() => {
@@ -83,21 +84,52 @@ export default function Dashboard() {
           </div>
         </div>
 
+        <div className="flex gap-2 mb-4">
+          <button
+            onClick={() => setFilter('recurring')}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+              filter === 'recurring'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            Recurring
+          </button>
+          <button
+            onClick={() => setFilter('nonrecurring')}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+              filter === 'nonrecurring'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            Nonrecurring
+          </button>
+        </div>
+
         <NotificationsBanner tasks={tasks} />
 
-        {tasks.length === 0 ? (
+        {tasks.filter((t) => filter === 'recurring' ? t.interval_days != null : t.interval_days == null).length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 mb-4">No tasks yet</p>
+            <p className="text-gray-500 mb-4">
+              {tasks.length === 0 ? 'No tasks yet' : `No ${filter} tasks`}
+            </p>
             <Link
               href="/tasks/new"
               className="text-blue-600 hover:text-blue-700 font-medium"
             >
-              Create your first task
+              {tasks.length === 0 ? 'Create your first task' : 'Add a task'}
             </Link>
           </div>
         ) : (
           <div className="space-y-3">
-            {tasks.map((task) => (
+            {tasks
+              .filter((task) =>
+                filter === 'recurring'
+                  ? task.interval_days != null
+                  : task.interval_days == null
+              )
+              .map((task) => (
               <TaskCard
                 key={task.id}
                 task={task}

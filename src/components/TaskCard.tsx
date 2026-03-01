@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import type { TaskWithCompletion } from '@/lib/types'
-import { getTaskStatus, formatRelativeTime, getIntervalLabel } from '@/lib/utils'
+import { getTaskStatus, formatShortDate, getIntervalLabel } from '@/lib/utils'
 
 interface TaskCardProps {
   task: TaskWithCompletion
@@ -57,7 +57,7 @@ export function TaskCard({ task, onComplete, showColors = true }: TaskCardProps)
           </div>
           <div className="mt-1 text-sm text-gray-600">
             {task.last_completion ? (
-              <>Last done: {formatRelativeTime(task.last_completion.completed_at)}</>
+              <>Last done: {formatShortDate(task.last_completion.completed_at)}</>
             ) : (
               <span className="text-gray-500">Never completed</span>
             )}
