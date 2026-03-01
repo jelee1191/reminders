@@ -35,10 +35,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-gray-950">
       <div className="max-w-md w-full p-8">
-        <h1 className="text-2xl font-bold text-center mb-8 text-gray-900">
-          Task Tracker
+        <h1 className="text-2xl font-bold text-center mb-8 text-gray-100">
+          Reminders
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -51,12 +51,12 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-900"
+              className="w-full px-4 py-3 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-gray-900 text-gray-100 placeholder-gray-500"
               autoFocus
             />
           </div>
           {error && (
-            <p className="text-red-600 text-sm text-center">{error}</p>
+            <p className="text-red-400 text-sm text-center">{error}</p>
           )}
           <button
             type="submit"

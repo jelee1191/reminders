@@ -15,13 +15,13 @@ export function NotificationsBanner({ tasks }: NotificationsBannerProps) {
   }
 
   return (
-    <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-      <h2 className="font-medium text-red-800 mb-2">
+    <div className="bg-red-900/30 border border-red-700 rounded-lg p-4 mb-6">
+      <h2 className="font-medium text-red-400 mb-2">
         {overdueTasks.length} {overdueTasks.length === 1 ? 'task' : 'tasks'} overdue
       </h2>
       <ul className="space-y-1">
         {overdueTasks.map((task) => (
-          <li key={task.id} className="text-sm text-red-700">
+          <li key={task.id} className="text-sm text-red-400">
             {task.name}
           </li>
         ))}

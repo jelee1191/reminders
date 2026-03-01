@@ -84,7 +84,7 @@ export function TaskForm({ task, mode }: TaskFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
           Task Name *
         </label>
         <input
@@ -93,13 +93,13 @@ export function TaskForm({ task, mode }: TaskFormProps) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-900"
+          className="w-full px-4 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-gray-800 text-gray-100 placeholder-gray-500"
           placeholder="e.g., Replace cat water fountain filter"
         />
       </div>
 
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-1">
           Description (optional)
         </label>
         <textarea
@@ -107,20 +107,20 @@ export function TaskForm({ task, mode }: TaskFormProps) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-900 resize-none"
+          className="w-full px-4 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-gray-800 text-gray-100 placeholder-gray-500 resize-none"
           placeholder="Any additional notes..."
         />
       </div>
 
       <div>
-        <label htmlFor="interval" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="interval" className="block text-sm font-medium text-gray-300 mb-1">
           Expected Interval
         </label>
         <select
           id="interval"
           value={intervalSelect}
           onChange={(e) => setIntervalSelect(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-900 bg-white"
+          className="w-full px-4 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-gray-800 text-gray-100"
         >
           {INTERVAL_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
@@ -135,7 +135,7 @@ export function TaskForm({ task, mode }: TaskFormProps) {
               value={customDays}
               onChange={(e) => setCustomDays(e.target.value)}
               min="1"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-900"
+              className="w-full px-4 py-2 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-gray-800 text-gray-100 placeholder-gray-500"
               placeholder="Number of days"
             />
           </div>
@@ -148,14 +148,14 @@ export function TaskForm({ task, mode }: TaskFormProps) {
           type="checkbox"
           checked={notificationsEnabled}
           onChange={(e) => setNotificationsEnabled(e.target.checked)}
-          className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          className="w-4 h-4 rounded border-gray-600 text-blue-500 focus:ring-blue-500 bg-gray-800"
         />
-        <label htmlFor="notifications" className="text-sm text-gray-700">
+        <label htmlFor="notifications" className="text-sm text-gray-300">
           Show in notifications when overdue
         </label>
       </div>
 
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {error && <p className="text-red-400 text-sm">{error}</p>}
 
       <div className="flex gap-3">
         <button
@@ -168,7 +168,7 @@ export function TaskForm({ task, mode }: TaskFormProps) {
         <button
           type="button"
           onClick={() => router.back()}
-          className="px-6 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+          className="px-6 py-2 border border-gray-700 text-gray-300 font-medium rounded-lg hover:bg-gray-800 transition-colors"
         >
           Cancel
         </button>

@@ -8,28 +8,25 @@ import { getTaskStatus, formatShortDate, getIntervalLabel } from '@/lib/utils'
 interface TaskCardProps {
   task: TaskWithCompletion
   onComplete: (taskId: string) => Promise<void>
-  showColors?: boolean
 }
 
-export function TaskCard({ task, onComplete, showColors = true }: TaskCardProps) {
+export function TaskCard({ task, onComplete }: TaskCardProps) {
   const [loading, setLoading] = useState(false)
   const status = getTaskStatus(task)
 
   const statusColors = {
-    good: 'bg-green-100 border-green-300',
-    warning: 'bg-yellow-100 border-yellow-300',
-    overdue: 'bg-red-100 border-red-300',
-    neutral: 'bg-gray-100 border-gray-300',
+    good: 'bg-green-900/30 border-green-700',
+    warning: 'bg-yellow-900/30 border-yellow-700',
+    overdue: 'bg-red-900/30 border-red-700',
+    neutral: 'bg-gray-800 border-gray-600',
   }
 
   const statusDot = {
     good: 'bg-green-500',
     warning: 'bg-yellow-500',
     overdue: 'bg-red-500',
-    neutral: 'bg-gray-400',
+    neutral: 'bg-gray-500',
   }
-
-  const noColorStyle = 'bg-white border-gray-200'
 
   async function handleComplete() {
     setLoading(true)
@@ -41,21 +38,19 @@ export function TaskCard({ task, onComplete, showColors = true }: TaskCardProps)
   }
 
   return (
-    <div className={`rounded-lg border p-4 ${showColors ? statusColors[status] : noColorStyle}`}>
+    <div className={`rounded-lg border p-4 ${statusColors[status]}`}>
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            {showColors && (
-              <span className={`w-2.5 h-2.5 rounded-full ${statusDot[status]}`} />
-            )}
+            <span className={`w-2.5 h-2.5 rounded-full ${statusDot[status]}`} />
             <Link
               href={`/tasks/${task.id}`}
-              className="font-medium text-gray-900 hover:text-blue-600 truncate"
+              className="font-medium text-gray-100 hover:text-blue-400 truncate"
             >
               {task.name}
             </Link>
           </div>
-          <div className="mt-1 text-sm text-gray-600">
+          <div className="mt-1 text-sm text-gray-400">
             {task.last_completion ? (
               <>Last done: {formatShortDate(task.last_completion.completed_at)}</>
             ) : (

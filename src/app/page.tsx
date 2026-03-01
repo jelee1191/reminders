@@ -9,23 +9,7 @@ import type { TaskWithCompletion } from '@/lib/types'
 export default function Dashboard() {
   const [tasks, setTasks] = useState<TaskWithCompletion[]>([])
   const [loading, setLoading] = useState(true)
-  const [showColors, setShowColors] = useState(true)
   const [filter, setFilter] = useState<'recurring' | 'nonrecurring'>('recurring')
-
-  // Load color preference from localStorage
-  useEffect(() => {
-    const stored = localStorage.getItem('showColors')
-    if (stored !== null) {
-      setShowColors(stored === 'true')
-    }
-  }, [])
-
-  // Save color preference to localStorage
-  function toggleColors() {
-    const newValue = !showColors
-    setShowColors(newValue)
-    localStorage.setItem('showColors', String(newValue))
-  }
 
   const fetchTasks = useCallback(async () => {
     try {
@@ -54,27 +38,18 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+        <div className="text-gray-400">Loading...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-950">
       <div className="max-w-2xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Tasks</h1>
+          <h1 className="text-2xl font-bold text-gray-100">Reminders</h1>
           <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={showColors}
-                onChange={toggleColors}
-                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              Colors
-            </label>
             <Link
               href="/tasks/new"
               className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
@@ -90,7 +65,7 @@ export default function Dashboard() {
             className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
               filter === 'recurring'
                 ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                : 'bg-gray-800 text-gray-300 border border-gray-700 hover:bg-gray-700'
             }`}
           >
             Recurring
@@ -100,7 +75,7 @@ export default function Dashboard() {
             className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
               filter === 'nonrecurring'
                 ? 'bg-blue-600 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                : 'bg-gray-800 text-gray-300 border border-gray-700 hover:bg-gray-700'
             }`}
           >
             Nonrecurring
@@ -111,12 +86,12 @@ export default function Dashboard() {
 
         {tasks.filter((t) => filter === 'recurring' ? t.interval_days != null : t.interval_days == null).length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 mb-4">
+            <p className="text-gray-400 mb-4">
               {tasks.length === 0 ? 'No tasks yet' : `No ${filter} tasks`}
             </p>
             <Link
               href="/tasks/new"
-              className="text-blue-600 hover:text-blue-700 font-medium"
+              className="text-blue-400 hover:text-blue-300 font-medium"
             >
               {tasks.length === 0 ? 'Create your first task' : 'Add a task'}
             </Link>
@@ -129,12 +104,16 @@ export default function Dashboard() {
                   ? task.interval_days != null
                   : task.interval_days == null
               )
+              .sort((a, b) => {
+                const aTime = a.last_completion ? new Date(a.last_completion.completed_at).getTime() : 0
+                const bTime = b.last_completion ? new Date(b.last_completion.completed_at).getTime() : 0
+                return bTime - aTime
+              })
               .map((task) => (
               <TaskCard
                 key={task.id}
                 task={task}
                 onComplete={handleComplete}
-                showColors={showColors}
               />
             ))}
           </div>

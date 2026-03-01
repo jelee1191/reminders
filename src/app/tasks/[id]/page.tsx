@@ -68,18 +68,18 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+        <div className="text-gray-400">Loading...</div>
       </div>
     )
   }
 
   if (!task) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-500 mb-4">Task not found</p>
-          <Link href="/" className="text-blue-600 hover:text-blue-700">
+          <p className="text-gray-400 mb-4">Task not found</p>
+          <Link href="/" className="text-blue-400 hover:text-blue-300">
             Back to tasks
           </Link>
         </div>
@@ -89,18 +89,18 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
 
   if (editing) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-950">
         <div className="max-w-2xl mx-auto px-4 py-8">
           <div className="mb-6">
             <button
               onClick={() => setEditing(false)}
-              className="text-sm text-gray-500 hover:text-gray-700"
+              className="text-sm text-gray-400 hover:text-gray-300"
             >
               &larr; Cancel editing
             </button>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Edit Task</h1>
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <h1 className="text-2xl font-bold text-gray-100 mb-6">Edit Task</h1>
+          <div className="bg-gray-900 rounded-lg border border-gray-700 p-6">
             <TaskForm task={task} mode="edit" />
           </div>
         </div>
@@ -109,36 +109,36 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-950">
       <div className="max-w-2xl mx-auto px-4 py-8">
         <div className="mb-6">
           <Link
             href="/"
-            className="text-sm text-gray-500 hover:text-gray-700"
+            className="text-sm text-gray-400 hover:text-gray-300"
           >
             &larr; Back to tasks
           </Link>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <div className="bg-gray-900 rounded-lg border border-gray-700 p-6 mb-6">
           <div className="flex items-start justify-between gap-4 mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">{task.name}</h1>
+              <h1 className="text-2xl font-bold text-gray-100">{task.name}</h1>
               {task.description && (
-                <p className="mt-2 text-gray-600">{task.description}</p>
+                <p className="mt-2 text-gray-400">{task.description}</p>
               )}
               <div className="mt-3 flex flex-wrap gap-2">
                 {task.interval_days && (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-900/30 text-blue-400">
                     {getIntervalLabel(task.interval_days)}
                   </span>
                 )}
                 {task.notifications_enabled ? (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-900/30 text-green-400">
                     Notifications on
                   </span>
                 ) : (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-800 text-gray-400">
                     Notifications off
                   </span>
                 )}
@@ -152,31 +152,31 @@ export default function TaskDetailPage({ params }: { params: Promise<{ id: strin
             </button>
           </div>
 
-          <div className="flex gap-3 pt-4 border-t border-gray-100">
+          <div className="flex gap-3 pt-4 border-t border-gray-700">
             <button
               onClick={() => setEditing(true)}
-              className="text-sm text-gray-600 hover:text-gray-900"
+              className="text-sm text-gray-400 hover:text-gray-200"
             >
               Edit
             </button>
             <button
               onClick={handleArchive}
-              className="text-sm text-gray-600 hover:text-gray-900"
+              className="text-sm text-gray-400 hover:text-gray-200"
             >
               Archive
             </button>
             <button
               onClick={handleDelete}
               disabled={deleting}
-              className="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
+              className="text-sm text-red-400 hover:text-red-300 disabled:opacity-50"
             >
               {deleting ? 'Deleting...' : 'Delete'}
             </button>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-gray-900 rounded-lg border border-gray-700 p-6">
+          <h2 className="text-lg font-semibold text-gray-100 mb-4">
             History ({task.completions.length})
           </h2>
           <CompletionHistory completions={task.completions} onUpdate={fetchTask} />

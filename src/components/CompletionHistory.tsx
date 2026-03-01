@@ -69,7 +69,7 @@ export function CompletionHistory({ completions, onUpdate }: CompletionHistoryPr
   }
 
   return (
-    <div className="divide-y divide-gray-100">
+    <div className="divide-y divide-gray-800">
       {completions.map((completion) => (
         <div key={completion.id} className="py-3">
           {editingId === completion.id ? (
@@ -78,14 +78,14 @@ export function CompletionHistory({ completions, onUpdate }: CompletionHistoryPr
                 type="datetime-local"
                 value={editDate}
                 onChange={(e) => setEditDate(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900"
+                className="w-full px-3 py-2 border border-gray-700 rounded-lg text-sm bg-gray-800 text-gray-100"
               />
               <input
                 type="text"
                 value={editNotes}
                 onChange={(e) => setEditNotes(e.target.value)}
                 placeholder="Notes (optional)"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900"
+                className="w-full px-3 py-2 border border-gray-700 rounded-lg text-sm bg-gray-800 text-gray-100 placeholder-gray-500"
               />
               <div className="flex gap-2">
                 <button
@@ -97,7 +97,7 @@ export function CompletionHistory({ completions, onUpdate }: CompletionHistoryPr
                 </button>
                 <button
                   onClick={cancelEdit}
-                  className="px-3 py-1 border border-gray-300 text-gray-700 text-sm rounded-lg hover:bg-gray-50"
+                  className="px-3 py-1 border border-gray-700 text-gray-300 text-sm rounded-lg hover:bg-gray-800"
                 >
                   Cancel
                 </button>
@@ -106,24 +106,24 @@ export function CompletionHistory({ completions, onUpdate }: CompletionHistoryPr
           ) : (
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1">
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm font-medium text-gray-100">
                   {formatShortDate(completion.completed_at)}
                 </span>
                 {completion.notes && (
-                  <p className="mt-1 text-sm text-gray-600">{completion.notes}</p>
+                  <p className="mt-1 text-sm text-gray-400">{completion.notes}</p>
                 )}
               </div>
               <div className="flex gap-2 shrink-0">
                 <button
                   onClick={() => startEdit(completion)}
-                  className="text-xs text-gray-500 hover:text-gray-700"
+                  className="text-xs text-gray-500 hover:text-gray-300"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => deleteCompletion(completion.id)}
                   disabled={loading}
-                  className="text-xs text-red-500 hover:text-red-700 disabled:opacity-50"
+                  className="text-xs text-red-500 hover:text-red-300 disabled:opacity-50"
                 >
                   Delete
                 </button>

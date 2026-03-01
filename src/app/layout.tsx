@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Task Tracker",
+  title: "Reminders",
   description: "Track your periodic tasks and chores",
 };
 
